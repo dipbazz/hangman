@@ -6,13 +6,14 @@ words = %w[python awesome ruby rails book javascript space engineering laptop]
 
 class Hangman
   attr_reader :hidden_word
-  attr_accessor :turn, :over, :guessed_characters
+  attr_accessor :turn, :over, :guessed_characters, :guess, :failed
 
   def initialize(word)
     @hidden_word = word
-    @guessed_characters = []
+    @guessed_characters = ''
     @turn = 5
     @over = false
+    @failed = false
   end
 
   def play
@@ -32,7 +33,7 @@ class Hangman
       character = gets.chomp
 
       if valid_character?(character)
-        guessed_characters << character
+        self.guessed_characters += character
         break
       end
     end
@@ -56,22 +57,38 @@ class Hangman
     if hidden_word.include?(character)
       display_word(character)
     else
-      puts 'No this character is not here.'
       self.turn -= 1
-      if turn < 1
-        self.over = true
-        game_over
-      end
+      puts "Wrong guess. you have now #{turn} turn left."
+      game_over
     end
   end
 
   def display_word(character = nil)
-    hidden_word.each_char { |i| print i == character ? i : '_' }
+    # binding.pry()
+    self.failed = false
+    hidden_word.each_char do |i|
+      if guessed_characters.include?(i)
+        print i
+      else
+        print '_'
+        self.failed = true
+      end
+    end
     puts ''
+    game_over
   end
 
   def game_over
-    puts "GAME OVER!! Better luck next time.\nThe word was #{hidden_word}"
+    if failed
+      if turn < 1
+        puts "GAME OVER!! Better luck next time.\nThe word was #{hidden_word}"
+        self.over = true
+      end
+    else
+      puts 'You won the game. Congratulations!!'
+      puts "The secret word is #{hidden_word}"
+      self.over = true
+    end
   end
 end
 
