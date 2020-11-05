@@ -27,7 +27,7 @@ Below contains the gameplay snapshot.
 
    - Clone this repo.
    - Navigate to the hangman folder
-   - In your terminal run `ruby main.rb`
+   - In your terminal run `ruby hangman.rb`
    - You are successful to get a local copy up and running.
 
 
