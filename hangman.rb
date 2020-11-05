@@ -1,9 +1,10 @@
-# frozen_string_literal: true
-
-require 'pry'
-
 words = %w[python awesome ruby rails book javascript space engineering laptop]
 
+#   This is a class for Hangman. Where users can play the game.
+#
+#   for eg:
+#     player = Hangman.new('some_word')
+#     player.play()
 class Hangman
   attr_reader :hidden_word
   attr_accessor :turn, :over, :guessed_characters, :guess, :failed
@@ -17,7 +18,6 @@ class Hangman
   end
 
   def play
-    # binding.pry()
     display_word
 
     until over
@@ -29,7 +29,7 @@ class Hangman
   def ask_character
     character = ''
     loop do
-      puts 'Enter your guess character:'
+      puts "\nEnter your guess character:"
       character = gets.chomp
 
       if valid_character?(character)
@@ -55,7 +55,7 @@ class Hangman
 
   def check_character(character)
     if hidden_word.include?(character)
-      display_word(character)
+      display_word
     else
       self.turn -= 1
       puts "Wrong guess. you have now #{turn} turn left."
@@ -63,8 +63,7 @@ class Hangman
     end
   end
 
-  def display_word(character = nil)
-    # binding.pry()
+  def display_word
     self.failed = false
     hidden_word.each_char do |i|
       if guessed_characters.include?(i)
@@ -74,18 +73,17 @@ class Hangman
         self.failed = true
       end
     end
-    puts ''
     game_over
   end
 
   def game_over
     if failed
       if turn < 1
-        puts "GAME OVER!! Better luck next time.\nThe word was #{hidden_word}"
+        puts "\nGAME OVER!! Better luck next time.\nThe word was #{hidden_word}"
         self.over = true
       end
     else
-      puts 'You won the game. Congratulations!!'
+      puts "\nYou won the game. Congratulations!!"
       puts "The secret word is #{hidden_word}"
       self.over = true
     end
@@ -93,5 +91,4 @@ class Hangman
 end
 
 player = Hangman.new(words.sample)
-
 player.play
